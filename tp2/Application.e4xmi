@@ -5,7 +5,7 @@
       <children xsi:type="advanced:Perspective" xmi:id="_tN4EoObgEeWGrJ-EnXlyLw" elementId="tp2.perspective.mainwindow" label="Main Window">
         <children xsi:type="basic:PartSashContainer" xmi:id="_y92fMObgEeWGrJ-EnXlyLw" elementId="tp2.partsashcontainer.1" horizontal="true">
           <children xsi:type="basic:Part" xmi:id="_0r7xoObgEeWGrJ-EnXlyLw" elementId="tp2.part.0" contributionURI="bundleclass://tp2/com.log8430.group9.views.TreePart"/>
-          <children xsi:type="basic:Part" xmi:id="_15o64ObgEeWGrJ-EnXlyLw" elementId="tp2.part.2" contributionURI="bundleclass://tp2/com.log8430.group9.views.CommandPart"/>
+          <children xsi:type="basic:Part" xmi:id="_15o64ObgEeWGrJ-EnXlyLw" elementId="tp2.part.2" contributionURI="bundleclass://tp2/com.log8430.group9.views.CommandsPart"/>
         </children>
       </children>
     </children>

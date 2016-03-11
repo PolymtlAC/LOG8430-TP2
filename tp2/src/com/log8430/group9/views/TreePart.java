@@ -14,72 +14,167 @@ package com.log8430.group9.views;
 import java.io.File;
 
 import javax.annotation.PostConstruct;
+import javax.swing.JFileChooser;
+import javax.swing.event.TreeSelectionEvent;
 
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.TypedEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.DirectoryDialog;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 
 public class TreePart {
 	protected Tree fileTree;
+	protected Button selectRoot;
+	protected File currentFile;
 
 	@PostConstruct
 	public void createComposite(Composite parent) {
+		GridLayout gridLayout = new GridLayout();
+		gridLayout.numColumns = 1;
+		parent.setLayout(gridLayout);
+
+
+
 		fileTree = new Tree(parent, SWT.SINGLE | SWT.BORDER);
-		File[] roots = File.listRoots();
-	    for (int i = 0; i < roots.length; i++) {
-	      File file = roots[i];
-	      TreeItem treeItem = new TreeItem(fileTree, SWT.NONE);
-	      treeItem.setText(file.getAbsolutePath());
-	      treeItem.setData(file);
-	      new TreeItem(treeItem, SWT.NONE);
-	    }
-	    fileTree.addListener(SWT.Expand, new Listener() {
-	      public void handleEvent(Event e) {
-	        TreeItem item = (TreeItem) e.item;
-	        if (item == null)
-	          return;
-	        if (item.getItemCount() == 1) {
-	          TreeItem firstItem = item.getItems()[0];
-	          if (firstItem.getData() != null)
-	            return;
-	          firstItem.dispose();
-	        } else {
-	          return;
-	        }
-	        File root = (File) item.getData();
-	        File[] files = root.listFiles();
-	        if (files == null)
-	          return;
-	        for (int i = 0; i < files.length; i++) {
-	          File file = files[i];
-	          if (file.isDirectory()) {
-	            TreeItem treeItem = new TreeItem(item, SWT.NONE);
-	            treeItem.setText(file.getName());
-	            treeItem.setData(file);
-	            new TreeItem(treeItem, SWT.NONE);
-	          }
-	        }
-	      }
-	    });
-	    
-	    fileTree.addListener(SWT.Selection, new Listener() {
-	        public void handleEvent(Event e) {
-	          TreeItem item = (TreeItem) e.item;
-	          if (item == null)
-	            return;
-	          final File root = (File) item.getData();
-	          System.out.println(root.getAbsolutePath());
-	        }
-	      });
+		GridData gridDataTree = new GridData(GridData.FILL,GridData.FILL,true,true,1,4);
+		fileTree.setLayoutData(gridDataTree);
+
+		selectRoot = new Button(parent, SWT.PUSH);
+		GridData gridDataButton = new GridData(GridData.CENTER,GridData.FILL,false,false,1,1);
+		selectRoot.setLayoutData(gridDataButton);
+		selectRoot.setText("Select a file or a folder");
+		selectRoot.addListener(SWT.Selection,new Listener() {
+
+			@Override
+			public void handleEvent(Event event) {
+				selectFolder();
+			}
+
+		});
 		
+		File[] roots = File.listRoots();
+		for (int i = 0; i < roots.length; i++) {
+			File file = roots[i];
+			TreeItem treeItem = new TreeItem(fileTree, SWT.NONE);
+			treeItem.setText(file.getAbsolutePath());
+			treeItem.setData(file);
+			new TreeItem(treeItem, SWT.NONE);
+		}
+		fileTree.addListener(SWT.Expand, new Listener() {
+			public void handleEvent(Event e) {
+				TreeItem item = (TreeItem) e.item;
+				expand(item);
+			}
+		});
+
+		fileTree.addListener(SWT.Selection, new Listener() {
+			public void handleEvent(Event e) {
+				TreeItem item = (TreeItem) e.item;
+				valueChanged(item);
+			}
+		});
+
 	}
 
+
+	private void selectFolder() {
+		Shell shell = new Shell();
+		DirectoryDialog dialog = new DirectoryDialog(shell, SWT.OPEN);
+		String result = dialog.open();
+		if(result.equals(null))
+			return;
+		else{
+			fileTree.removeAll();
+			File root = new File(result);
+			File[] children = root.listFiles();
+			TreeItem rootItem = new TreeItem(fileTree, SWT.NONE);
+			rootItem.setText(root.getName());
+			rootItem.setData(root);
+			if (children == null)
+				return;
+			for (int i = 0; i < children.length; i++) {
+				File file = children[i];
+
+				TreeItem treeItem = new TreeItem(rootItem, SWT.NONE);
+				treeItem.setText(file.getName());
+				treeItem.setData(file);
+				if (file.isDirectory()) {
+					new TreeItem(treeItem, SWT.NONE);
+				}
+			}
+			rootItem.setExpanded(true);
+			setCurrentFile(root);
+		}
+
+	}
+
+	//TODO modifier expand pour factoriser le code avec selectFolder
+	private void expand(TreeItem item){
+		if (item == null)
+			return;
+		if (item.getItemCount() == 1) {
+			TreeItem firstItem = item.getItems()[0];
+			if (firstItem.getData() != null)
+				return;
+			firstItem.dispose();
+		} else {
+			return;
+		}
+		File root = (File) item.getData();
+		File[] files = root.listFiles();
+		if (files == null)
+			return;
+		for (int i = 0; i < files.length; i++) {
+			File file = files[i];
+
+			TreeItem treeItem = new TreeItem(item, SWT.NONE);
+			treeItem.setText(file.getName());
+			treeItem.setData(file);
+			if (file.isDirectory()) {
+				new TreeItem(treeItem, SWT.NONE);
+			}
+		}
+	}
+	private void valueChanged(TreeItem item) {
+		if (item == null)
+			return;
+		final File file = (File) item.getData();
+		System.out.println(file.getAbsolutePath());
+
+		if(file == null)
+			return;
+
+		this.setCurrentFile(file);
+	}
+	/**
+	 * 
+	 * @param file
+	 */
+	//TODO copmpleter cette fonctionnalité afin de transmettre le fichier selectionné aux commandes.
+	private void setCurrentFile(File file) {
+		this.currentFile = file;
+		/*
+        for(UICommand command : commands) {
+			command.setCurrentFile(file);
+
+			if(this.autoRunCheckBox.isSelected() && command.isEnabled()) {
+				command.execute();
+			}
+		}
+		 */
+	}
 }

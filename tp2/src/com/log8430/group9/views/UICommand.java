@@ -1,11 +1,13 @@
 package com.log8430.group9.views;
-import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.io.File;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 
 import com.log8430.group9.commands.Command;
 
@@ -15,11 +17,11 @@ import com.log8430.group9.commands.Command;
  * Contains the command, the button and the result label. 
  * Also connect the button click with the command's execution.
  */
-public class UICommand extends JPanel {
+public class UICommand extends Composite {
 	
 	protected Command command;
-	protected JButton commandButton;
-	protected JLabel commandResult;
+	protected Button commandButton;
+	protected Label commandResult;
 	protected File currentFile;
 	
 	/**
@@ -29,20 +31,29 @@ public class UICommand extends JPanel {
 	 * </p>
 	 * @param command
 	 */
-	public UICommand(Command command) {
+	public UICommand(Command command,Composite parent,int style) {
+		super (parent,style);
 		this.command = command;
-		this.commandButton = new JButton(command.getName());
+		this.commandButton = new Button(this,SWT.PUSH);
+		this.commandButton.setText("test"/*command.getName()*/);
 		this.commandButton.setEnabled(false);
-		this.commandResult = new JLabel();
-		
-		this.commandButton.addActionListener(event -> {
+		this.commandResult = new Label(this, SWT.SINGLE);
+		commandResult.setText("sdbxfckhjvbw,dvb,wxcxw");
+		this.commandButton.addListener(SWT.Selection,event -> {
 			this.execute();
 		});
 		
-		this.setLayout(new GridLayout(1,2));
-		this.setMaximumSize(new Dimension(800,50));
-		this.add(this.commandButton);
-		this.add(this.commandResult);
+		
+		GridLayout grid = new GridLayout();
+		grid.numColumns = 2;
+		this.setLayout(grid);
+		
+		GridData gridData= new GridData(SWT.FILL, SWT.CENTER, true, true, 1, 1);
+		gridData.minimumWidth = 200;
+		commandButton.setLayoutData(gridData);
+		GridData gridData2= new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
+		commandResult.setLayoutData(gridData2);
+		
 	}
 
 	/**

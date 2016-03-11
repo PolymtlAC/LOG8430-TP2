@@ -49,8 +49,7 @@ public class CommandsPart {
 		clear.addListener(SWT.Selection, new Listener() {
 				@Override
 				public void handleEvent(Event e) {	              
-	              Button button = new Button(commandsContainer, SWT.PUSH);
-	              button.setText("button ");
+	              UICommand button = new UICommand(null, commandsContainer, SWT.NONE);
 	              // reset the minimum width and height so children can be seen - method 2
 	              commandsContainer.setSize(commandsContainer.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	              commandsContainer.layout();

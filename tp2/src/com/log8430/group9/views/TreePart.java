@@ -67,12 +67,10 @@ public class TreePart {
 		});
 		
 		File[] roots = File.listRoots();
-		for (int i = 0; i < roots.length; i++) {
-			File file = roots[i];
-			TreeItem treeItem = new TreeItem(fileTree, SWT.NONE);
-			treeItem.setText(file.getAbsolutePath());
-			treeItem.setData(file);
-			new TreeItem(treeItem, SWT.NONE);
+		if(roots.length > 0)
+		{
+			File root = roots[0];
+			setRoot(root);
 		}
 		fileTree.addListener(SWT.Expand, new Listener() {
 			public void handleEvent(Event e) {
@@ -98,42 +96,29 @@ public class TreePart {
 		if(result.equals(null))
 			return;
 		else{
-			fileTree.removeAll();
 			File root = new File(result);
-			File[] children = root.listFiles();
-			TreeItem rootItem = new TreeItem(fileTree, SWT.NONE);
-			rootItem.setText(root.getName());
-			rootItem.setData(root);
-			if (children == null)
-				return;
-			for (int i = 0; i < children.length; i++) {
-				File file = children[i];
-
-				TreeItem treeItem = new TreeItem(rootItem, SWT.NONE);
-				treeItem.setText(file.getName());
-				treeItem.setData(file);
-				if (file.isDirectory()) {
-					new TreeItem(treeItem, SWT.NONE);
-				}
-			}
-			rootItem.setExpanded(true);
+			setRoot(root);
 			setCurrentFile(root);
 		}
 
 	}
 
-	//TODO modifier expand pour factoriser le code avec selectFolder
+	private void setRoot(File root){
+		fileTree.removeAll();
+		TreeItem rootItem = new TreeItem(fileTree, SWT.NONE);
+		if(root.getName().equals(""))
+			rootItem.setText(root.getAbsolutePath());
+		else
+			rootItem.setText(root.getName());
+		rootItem.setData(root);
+		expand(rootItem);
+		rootItem.setExpanded(true);
+	}
+	
 	private void expand(TreeItem item){
 		if (item == null)
 			return;
-		if (item.getItemCount() == 1) {
-			TreeItem firstItem = item.getItems()[0];
-			if (firstItem.getData() != null)
-				return;
-			firstItem.dispose();
-		} else {
-			return;
-		}
+		System.out.println(item.getItemCount());
 		File root = (File) item.getData();
 		File[] files = root.listFiles();
 		if (files == null)
@@ -142,7 +127,10 @@ public class TreePart {
 			File file = files[i];
 
 			TreeItem treeItem = new TreeItem(item, SWT.NONE);
-			treeItem.setText(file.getName());
+			if(file.getName().equals(""))
+				treeItem.setText(file.getAbsolutePath());
+			else
+				treeItem.setText(file.getName());
 			treeItem.setData(file);
 			if (file.isDirectory()) {
 				new TreeItem(treeItem, SWT.NONE);

@@ -35,10 +35,10 @@ public class UICommand extends Composite {
 		super (parent,style);
 		this.command = command;
 		this.commandButton = new Button(this,SWT.PUSH);
-		this.commandButton.setText("test"/*command.getName()*/);
+		this.commandButton.setText(command.getName());
 		this.commandButton.setEnabled(false);
 		this.commandResult = new Label(this, SWT.SINGLE);
-		commandResult.setText("sdbxfckhjvbw,dvb,wxcxw");
+		commandResult.setText("fbgnj,hvbfdcsbfg");
 		this.commandButton.addListener(SWT.Selection,event -> {
 			this.execute();
 		});
@@ -51,7 +51,8 @@ public class UICommand extends Composite {
 		GridData gridData= new GridData(SWT.FILL, SWT.CENTER, true, true, 1, 1);
 		gridData.minimumWidth = 200;
 		commandButton.setLayoutData(gridData);
-		GridData gridData2= new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
+		GridData gridData2= new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gridData2.minimumWidth = 800;
 		commandResult.setLayoutData(gridData2);
 		
 	}
@@ -62,11 +63,12 @@ public class UICommand extends Composite {
 	 */
 	public void execute() {
 		try {
+			System.out.println(this.command.execute(currentFile));
 			this.commandResult.setText(this.command.execute(currentFile));
 		} catch(Exception e) {
 			this.commandResult.setText(e.getMessage());
 		}
-		
+	
 	}
 	
 	/**

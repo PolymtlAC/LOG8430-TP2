@@ -13,6 +13,7 @@
       <import plugin="org.eclipse.e4.ui.di" version="1.1.0"/>
       <import plugin="org.eclipse.e4.core.contexts" version="1.4.0"/>
    </requires>
+   <extension-point id="com.log8430.group9.commandExtension" name="commandExtension" schema="schema/com.log8430.group9.commandExtension.exsd"/>
 
    <extension
          id="product"
@@ -20,10 +21,6 @@
       <product
             name="tp2"
             application="org.eclipse.e4.ui.workbench.swt.E4Application">
-         <property
-               name="applicationCSS"
-               value="platform:/plugin/tp2/css/default.css">
-         </property>
          <property
                name="appName"
                value="tp2">

@@ -1,5 +1,7 @@
 package com.log8430.group9.views;
 
+import java.util.ArrayList;
+
 import javax.annotation.PostConstruct;
 
 import org.eclipse.swt.SWT;
@@ -11,13 +13,20 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 
+import com.log8430.group9.commands.Command;
+import com.log8430.group9.commands.PlugInLoader;
+
 public class CommandsPart {
 	protected Composite commandsContainer;
 	protected Button clear;
-	protected Button autoRun;
+	protected static Button autoRun;
+	protected PlugInLoader plugInLoader;
+	protected static ArrayList<UICommand> commands;
 
 	@PostConstruct
 	public void createComposite(Composite parent) {
+		plugInLoader = PlugInLoader.getInstance();
+		
 		GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 2;
 		parent.setLayout(gridLayout);	
@@ -34,6 +43,8 @@ public class CommandsPart {
 		commandsContainer.setLayout(gridLayoutCC);
 		commandsContainer.setSize(commandsContainer.computeSize(SWT.BORDER, SWT.DEFAULT));
 		
+		loadCommands();
+		
 		clear = new Button(parent, SWT.PUSH);
 		clear.setText("Clear");
 		GridData gridDataClear = new GridData(GridData.FILL,GridData.FILL,true,false,1,1);
@@ -43,24 +54,33 @@ public class CommandsPart {
 		GridData gridDataAutoRun = new GridData(GridData.FILL,GridData.FILL,false,false,1,1);
 		autoRun.setLayoutData(gridDataAutoRun);
 		
-		
-		//TODO cette action est pour tester la mise a jour des dimmension du scroll a l'ajout d'element
-		//il faudra utiliser son contenu lors du chargement des commandes
+	
 		clear.addListener(SWT.Selection, new Listener() {
 				@Override
 				public void handleEvent(Event e) {	              
-	              UICommand button = new UICommand(null, commandsContainer, SWT.NONE);
-	              // reset the minimum width and height so children can be seen - method 2
-	              commandsContainer.setSize(commandsContainer.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-	              commandsContainer.layout();
+	              for(UICommand command : commands){
+	            	  command.clear();
+	              }
 	          }
 	      });
 		
-		
-		//permet de connaitre l'état dans lequel se trouve le bouton
-		//autoRun.getSelection();
+
 		
 		
 
+	}
+
+	public void loadCommands(){
+		ArrayList<Command> liste = plugInLoader.getCommandsList();
+
+		this.commands = new ArrayList<>();
+		
+		for(Command command : liste) {
+			UICommand uiCommand = new UICommand(command, commandsContainer, SWT.NONE);
+			this.commands.add(uiCommand);
+		}
+        // reset the minimum width and height so children can be seen - method 2
+        commandsContainer.setSize(commandsContainer.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+        commandsContainer.layout();
 	}
 }

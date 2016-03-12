@@ -36,6 +36,9 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 
+import com.log8430.group9.commands.Command;
+import com.log8430.group9.commands.PlugInLoader;
+
 public class TreePart {
 	protected Tree fileTree;
 	protected Button selectRoot;
@@ -43,6 +46,7 @@ public class TreePart {
 
 	@PostConstruct
 	public void createComposite(Composite parent) {
+		
 		GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 1;
 		parent.setLayout(gridLayout);
@@ -118,7 +122,6 @@ public class TreePart {
 	private void expand(TreeItem item){
 		if (item == null)
 			return;
-		System.out.println(item.getItemCount());
 		File root = (File) item.getData();
 		File[] files = root.listFiles();
 		if (files == null)
@@ -155,14 +158,13 @@ public class TreePart {
 	//TODO copmpleter cette fonctionnalité afin de transmettre le fichier selectionné aux commandes.
 	private void setCurrentFile(File file) {
 		this.currentFile = file;
-		/*
-        for(UICommand command : commands) {
+		System.out.println(CommandsPart.commands.size());
+        for(UICommand command : CommandsPart.commands) {
 			command.setCurrentFile(file);
-
-			if(this.autoRunCheckBox.isSelected() && command.isEnabled()) {
+			if(CommandsPart.autoRun.getSelection() && command.isEnabled()) {
 				command.execute();
 			}
 		}
-		 */
+		 
 	}
 }

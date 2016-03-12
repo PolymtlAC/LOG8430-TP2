@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ASCII"?>
+<application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_Y05EgefsEeWY4bDxVotG-Q" elementId="org.eclipse.e4.application" contributorURI="platform:/plugin/tp2" selectedElement="_Y05EgufsEeWY4bDxVotG-Q" bindingContexts="_Y05Ei-fsEeWY4bDxVotG-Q">
+  <children xsi:type="basic:TrimmedWindow" xmi:id="_Y05EgufsEeWY4bDxVotG-Q" elementId="org.eclipse.e4.window.main" contributorURI="platform:/plugin/tp2" selectedElement="_Y05Eg-fsEeWY4bDxVotG-Q" label="Empty E4 Application" x="156" y="156" width="870" height="400">
+    <tags>topLevel</tags>
+    <children xsi:type="advanced:PerspectiveStack" xmi:id="_Y05Eg-fsEeWY4bDxVotG-Q" elementId="tp2.perspectivestack.0" contributorURI="platform:/plugin/tp2" selectedElement="_Y05EhOfsEeWY4bDxVotG-Q">
+      <children xsi:type="advanced:Perspective" xmi:id="_Y05EhOfsEeWY4bDxVotG-Q" elementId="tp2.perspective.mainwindow" contributorURI="platform:/plugin/tp2" selectedElement="_Y05EhefsEeWY4bDxVotG-Q" label="Main Window">
+        <children xsi:type="basic:PartSashContainer" xmi:id="_Y05EhefsEeWY4bDxVotG-Q" elementId="tp2.partsashcontainer.1" contributorURI="platform:/plugin/tp2" selectedElement="_Y05EhufsEeWY4bDxVotG-Q" horizontal="true">
+          <children xsi:type="basic:Part" xmi:id="_Y05EhufsEeWY4bDxVotG-Q" elementId="tp2.part.0" contributorURI="platform:/plugin/tp2" containerData="10000" contributionURI="bundleclass://tp2/com.log8430.group9.views.TreePart"/>
+          <children xsi:type="basic:Part" xmi:id="_Y05Eh-fsEeWY4bDxVotG-Q" elementId="tp2.part.2" contributorURI="platform:/plugin/tp2" containerData="10000" contributionURI="bundleclass://tp2/com.log8430.group9.views.CommandsPart"/>
+        </children>
+      </children>
+    </children>
+    <mainMenu xmi:id="_Y05EiOfsEeWY4bDxVotG-Q" elementId="tp2.menu.0" contributorURI="platform:/plugin/tp2">
+      <children xsi:type="menu:HandledMenuItem" xmi:id="_Y05EiefsEeWY4bDxVotG-Q" elementId="tp2.handledmenuitem.evaluateextension" contributorURI="platform:/plugin/tp2" label="EvaluateExtension" command="_Y05EjufsEeWY4bDxVotG-Q"/>
+    </mainMenu>
+  </children>
+  <handlers xmi:id="_Y05EiufsEeWY4bDxVotG-Q" elementId="tp2.handler.0" contributorURI="platform:/plugin/tp2" contributionURI="bundleclass://tp2/com.log8430.group9.commands.EvaluateContributionsHandler" command="_Y05EjufsEeWY4bDxVotG-Q"/>
+  <rootContext xmi:id="_Y05Ei-fsEeWY4bDxVotG-Q" elementId="org.eclipse.ui.contexts.dialogAndWindow" contributorURI="platform:/plugin/tp2" name="In Dialog and Windows">
+    <children xmi:id="_Y05EjOfsEeWY4bDxVotG-Q" elementId="org.eclipse.ui.contexts.window" contributorURI="platform:/plugin/tp2" name="In Windows"/>
+    <children xmi:id="_Y05EjefsEeWY4bDxVotG-Q" elementId="org.eclipse.ui.contexts.dialog" contributorURI="platform:/plugin/tp2" name="In Dialogs"/>
+  </rootContext>
+  <commands xmi:id="_Y05EjufsEeWY4bDxVotG-Q" elementId="tp2.command.evaluateextensioncommand" contributorURI="platform:/plugin/tp2" commandName="EvaluateExtensionCommand"/>
+  <addons xmi:id="_Y05Ej-fsEeWY4bDxVotG-Q" elementId="org.eclipse.e4.core.commands.service" contributorURI="platform:/plugin/tp2" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
+  <addons xmi:id="_Y05EkOfsEeWY4bDxVotG-Q" elementId="org.eclipse.e4.ui.contexts.service" contributorURI="platform:/plugin/tp2" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
+  <addons xmi:id="_Y05EkefsEeWY4bDxVotG-Q" elementId="org.eclipse.e4.ui.bindings.service" contributorURI="platform:/plugin/tp2" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>
+  <addons xmi:id="_Y05EkufsEeWY4bDxVotG-Q" elementId="org.eclipse.e4.ui.workbench.commands.model" contributorURI="platform:/plugin/tp2" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.CommandProcessingAddon"/>
+  <addons xmi:id="_Y05Ek-fsEeWY4bDxVotG-Q" elementId="org.eclipse.e4.ui.workbench.handler.model" contributorURI="platform:/plugin/tp2" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.HandlerProcessingAddon"/>
+  <addons xmi:id="_Y05ElOfsEeWY4bDxVotG-Q" elementId="org.eclipse.e4.ui.workbench.contexts.model" contributorURI="platform:/plugin/tp2" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.ContextProcessingAddon"/>
+  <addons xmi:id="_Y05ElefsEeWY4bDxVotG-Q" elementId="org.eclipse.e4.ui.workbench.bindings.model" contributorURI="platform:/plugin/tp2" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.swt/org.eclipse.e4.ui.workbench.swt.util.BindingProcessingAddon"/>
+</application:Application>

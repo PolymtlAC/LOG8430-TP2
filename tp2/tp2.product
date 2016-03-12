@@ -28,6 +28,7 @@
    <plugins>
       <plugin id="CommandPathNamePlugIn"/>
       <plugin id="FileNameCommand"/>
+      <plugin id="FolderNameCommand"/>
       <plugin id="com.ibm.icu"/>
       <plugin id="javax.annotation"/>
       <plugin id="javax.inject"/>

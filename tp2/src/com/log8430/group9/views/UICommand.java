@@ -38,7 +38,7 @@ public class UICommand extends Composite {
 		this.commandButton.setText(command.getName());
 		this.commandButton.setEnabled(false);
 		this.commandResult = new Label(this, SWT.SINGLE);
-		commandResult.setText("fbgnj,hvbfdcsbfg");
+
 		this.commandButton.addListener(SWT.Selection,event -> {
 			this.execute();
 		});
@@ -63,7 +63,6 @@ public class UICommand extends Composite {
 	 */
 	public void execute() {
 		try {
-			System.out.println(this.command.execute(currentFile));
 			this.commandResult.setText(this.command.execute(currentFile));
 		} catch(Exception e) {
 			this.commandResult.setText(e.getMessage());

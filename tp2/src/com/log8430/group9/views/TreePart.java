@@ -14,30 +14,18 @@ package com.log8430.group9.views;
 import java.io.File;
 
 import javax.annotation.PostConstruct;
-import javax.swing.JFileChooser;
-import javax.swing.event.TreeSelectionEvent;
 
-import org.eclipse.e4.ui.di.Focus;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.TypedEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
-
-import com.log8430.group9.commands.Command;
-import com.log8430.group9.commands.PlugInLoader;
 
 public class TreePart {
 	protected Tree fileTree;
@@ -46,7 +34,6 @@ public class TreePart {
 
 	@PostConstruct
 	public void createComposite(Composite parent) {
-		
 		GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 1;
 		parent.setLayout(gridLayout);
@@ -97,7 +84,7 @@ public class TreePart {
 		Shell shell = new Shell();
 		DirectoryDialog dialog = new DirectoryDialog(shell, SWT.OPEN);
 		String result = dialog.open();
-		if(result.equals(null))
+		if(result == null)
 			return;
 		else{
 			File root = new File(result);
@@ -122,6 +109,7 @@ public class TreePart {
 	private void expand(TreeItem item){
 		if (item == null)
 			return;
+		item.removeAll();
 		File root = (File) item.getData();
 		File[] files = root.listFiles();
 		if (files == null)
@@ -144,8 +132,6 @@ public class TreePart {
 		if (item == null)
 			return;
 		final File file = (File) item.getData();
-		System.out.println(file.getAbsolutePath());
-
 		if(file == null)
 			return;
 
@@ -155,10 +141,8 @@ public class TreePart {
 	 * 
 	 * @param file
 	 */
-	//TODO copmpleter cette fonctionnalité afin de transmettre le fichier selectionné aux commandes.
 	private void setCurrentFile(File file) {
 		this.currentFile = file;
-		System.out.println(CommandsPart.commands.size());
         for(UICommand command : CommandsPart.commands) {
 			command.setCurrentFile(file);
 			if(CommandsPart.autoRun.getSelection() && command.isEnabled()) {

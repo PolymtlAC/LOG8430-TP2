@@ -27,7 +27,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 
-public class TreePart {
+public class TreePart implements InterPartCom{
 	protected Tree fileTree;
 	protected Button selectRoot;
 	protected File currentFile;
@@ -143,9 +143,9 @@ public class TreePart {
 	 */
 	private void setCurrentFile(File file) {
 		this.currentFile = file;
-        for(UICommand command : CommandsPart.commands) {
+        for(UICommand command : ressource.getCommands()) {
 			command.setCurrentFile(file);
-			if(CommandsPart.autoRun.getSelection() && command.isEnabled()) {
+			if(ressource.getAutoRun() && command.isEnabled()) {
 				command.execute();
 			}
 		}

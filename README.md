@@ -6,7 +6,7 @@ Ce logiciel permet d'exécuter des commandes sur des dossiers et des fichiers. U
 
 Certaines commandes ne peuvent être exécuter que pour des fichiers ou des dossiers. Dans ce cas, l'interface graphique s'adapte et certaines commandes sont "grisées" et désactivées. Si l'option "AutoRun" est activé, l'exécution des commandes accessibles est automatique dès la sélection d'un dossier ou d'un fichier. Enfin, un bouton clear permet d'effacer les différents résultats des commandes.
 
-Les commandes sont chargés automatiquement au lancement du logiciel via le dossier "XXXX" qui contient l'ensemble des plugins définissant les commandes. L'utilisateur peut ajouter ses propres commandes en les implémentant sous la forme d'un plugin (un plugin par commande) et en ajoutant les plugins dans le dossier "XXXX". Attention pour ajouter de nouvelles commandes, les implémentations doivent respecter l'interface Command.java. Pour ajouter des plugins Command il vous suffit de modifier le fichier de configuration du programme. 
+Les commandes sont chargés automatiquement au lancement du logiciel. L'utilisateur peut ajouter ses propres commandes. Il doit les implémenter sous la forme d'un plugin (un plugin par commande) tout en respectant l'interface Command. Ensuite, l'utilisateur doit modifier le fichier de configuration du programme pour ajouter ses plugins de commande. 
 
 Pour exécuter le logiciel avec Eclipse, il faut : 
 - Ouvrir le projet avec Eclipse,

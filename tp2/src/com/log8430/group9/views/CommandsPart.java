@@ -16,16 +16,17 @@ import org.eclipse.swt.widgets.Listener;
 import com.log8430.group9.commands.Command;
 import com.log8430.group9.commands.PlugInLoader;
 
-public class CommandsPart implements InterPartCom{
+public class CommandsPart {
 	protected Composite commandsContainer;
 	protected Button clear;
-	protected Button autoRun;
+	protected static Button autoRun;
 	protected PlugInLoader plugInLoader;
+	protected static ArrayList<UICommand> commands;
 
 	@PostConstruct
 	public void createComposite(Composite parent) {
 		plugInLoader = PlugInLoader.getInstance();
-
+		
 		GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 2;
 		parent.setLayout(gridLayout);	
@@ -41,9 +42,9 @@ public class CommandsPart implements InterPartCom{
 		gridLayoutCC.numColumns = 1;
 		commandsContainer.setLayout(gridLayoutCC);
 		commandsContainer.setSize(commandsContainer.computeSize(SWT.BORDER, SWT.DEFAULT));
-
+		
 		loadCommands();
-
+		
 		clear = new Button(parent, SWT.PUSH);
 		clear.setText("Clear");
 		GridData gridDataClear = new GridData(GridData.FILL,GridData.FILL,true,false,1,1);
@@ -52,40 +53,34 @@ public class CommandsPart implements InterPartCom{
 		autoRun.setText("autoRun");
 		GridData gridDataAutoRun = new GridData(GridData.FILL,GridData.FILL,false,false,1,1);
 		autoRun.setLayoutData(gridDataAutoRun);
-
-		autoRun.addListener(SWT.Selection, new Listener() {
-			@Override
-			public void handleEvent(Event e) {	              
-				ressource.setAutoRun(autoRun.getSelection());
-			}
-		});
-
+		
+	
 		clear.addListener(SWT.Selection, new Listener() {
-			@Override
-			public void handleEvent(Event e) {	              
-				for(UICommand command : ressource.getCommands()){
-					command.clear();
-				}
-			}
-		});
+				@Override
+				public void handleEvent(Event e) {	              
+	              for(UICommand command : commands){
+	            	  command.clear();
+	              }
+	          }
+	      });
+		
 
-
-
-
+		
+		
 
 	}
 
 	public void loadCommands(){
 		ArrayList<Command> liste = plugInLoader.getCommandsList();
-		ArrayList<UICommand> UIListe = new ArrayList<>();
 
+		this.commands = new ArrayList<>();
+		
 		for(Command command : liste) {
 			UICommand uiCommand = new UICommand(command, commandsContainer, SWT.NONE);
-			UIListe.add(uiCommand);
+			this.commands.add(uiCommand);
 		}
-		ressource.setCommands(UIListe);
-		// reset the minimum width and height so children can be seen - method 2
-		commandsContainer.setSize(commandsContainer.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		commandsContainer.layout();
+        // reset the minimum width and height so children can be seen - method 2
+        commandsContainer.setSize(commandsContainer.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+        commandsContainer.layout();
 	}
 }

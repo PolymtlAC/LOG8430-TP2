@@ -9,6 +9,10 @@ Certaines commandes ne peuvent être exécuter que pour des fichiers ou des doss
 Les commandes sont chargés automatiquement au lancement du logiciel. L'utilisateur peut ajouter ses propres commandes. Il doit les implémenter sous la forme d'un plugin (un plugin par commande) tout en respectant l'interface Command. Ensuite, l'utilisateur doit modifier le fichier de configuration du programme pour ajouter ses plugins de commande. 
 
 Pour exécuter le logiciel avec Eclipse, il faut : 
+- Executer "eclipse" dans le dossier application
+
+ou
+
 - Ouvrir le projet avec Eclipse,
 - Ouvrir le fichier tp2.product,
 - Aller dans l'onglet Overview,
@@ -46,5 +50,17 @@ Exemple d'une commande retournant le nom d'un fichier :
         
     }
 
+Ajouter un plugin :
+-creer avec eclipse un nouveau projet de type plugin
+-ajouter dans plugin.xml les dependances tp2 et org.eclipse.core.runtime
+-aller dans extension et faire add et selectionner com.log8430.group9.CommandExtension
+-Sur la droite à la ligne class, selectionner la classe implementant l'interface Command ci-dessus
 
+
+Pour l'ajouter à l'application fourni dans le dossier "application":
+-exporter le plugin au format "Deployable plug-ins and fragments" dans un dossier
+-copier le contenu de ce dossier dans application->plugins
+-dans le dossier configuration ouvrez le fichier config.
+-A la ligne osgi.bundles=, ajouter reference\:file\:nom_du_jar.jar@4, où nom_du_jar est le nom complet du jar copié précedemment
+-lancer l'application, la commande est maintenant disponible
 ### Have Fun !

@@ -6,18 +6,33 @@ Ce logiciel permet d'exécuter des commandes sur des dossiers et des fichiers. U
 
 Certaines commandes ne peuvent être exécuter que pour des fichiers ou des dossiers. Dans ce cas, l'interface graphique s'adapte et certaines commandes sont "grisées" et désactivées. Si l'option "AutoRun" est activé, l'exécution des commandes accessibles est automatique dès la sélection d'un dossier ou d'un fichier. Enfin, un bouton clear permet d'effacer les différents résultats des commandes.
 
-Les commandes sont chargés automatiquement au lancement du logiciel. L'utilisateur peut ajouter ses propres commandes. Il doit les implémenter sous la forme d'un plugin (un plugin par commande) tout en respectant l'interface Command. Ensuite, l'utilisateur doit modifier le fichier de configuration du programme pour ajouter ses plugins de commande. 
+Les commandes sont chargés automatiquement au lancement du logiciel. L'utilisateur peut ajouter ses propres commandes. Il doit les implémenter sous la forme d'un plugin (un plugin par commande) tout en respectant l'interface Command. 
+
+Avant d'exécuter le logiciel, vous devez :
+- Aller dans le menu d'Eclipse "File" -> "Import..." -> General -> Existing Projects into Workspace -> sélectionner les projets java des commandes souhaitées (les projets des commandes par défaut se trouvent dans le dossier "code Command").
 
 Pour exécuter le logiciel avec Eclipse, il faut : 
 - Executer "eclipse" dans le dossier application
-
 ou
-
 - Ouvrir le projet avec Eclipse,
 - Ouvrir le fichier tp2.product,
 - Aller dans l'onglet Overview,
 - Aller dans le sous-menu Testing,
 - Cliquer sur Launch an Eclipse application.
+
+Ajouter un plugin :
+-creer avec eclipse un nouveau projet de type plugin
+-ajouter dans plugin.xml les dependances tp2 et org.eclipse.core.runtime
+-aller dans extension et faire add et selectionner com.log8430.group9.CommandExtension
+-Sur la droite à la ligne class, selectionner la classe implementant l'interface Command ci-dessus
+
+
+Pour l'ajouter à l'application fourni dans le dossier "application":
+-exporter le plugin au format "Deployable plug-ins and fragments" dans un dossier
+-copier le contenu de ce dossier dans application->plugins
+-dans le dossier configuration ouvrez le fichier config.
+-A la ligne osgi.bundles=, ajouter reference\:file\:nom_du_jar.jar@4, où nom_du_jar est le nom complet du jar copié précedemment
+-lancer l'application, la commande est maintenant disponible
 
 Exemple d'une commande retournant le nom d'un fichier : 
 
@@ -50,17 +65,4 @@ Exemple d'une commande retournant le nom d'un fichier :
         
     }
 
-Ajouter un plugin :
--creer avec eclipse un nouveau projet de type plugin
--ajouter dans plugin.xml les dependances tp2 et org.eclipse.core.runtime
--aller dans extension et faire add et selectionner com.log8430.group9.CommandExtension
--Sur la droite à la ligne class, selectionner la classe implementant l'interface Command ci-dessus
-
-
-Pour l'ajouter à l'application fourni dans le dossier "application":
--exporter le plugin au format "Deployable plug-ins and fragments" dans un dossier
--copier le contenu de ce dossier dans application->plugins
--dans le dossier configuration ouvrez le fichier config.
--A la ligne osgi.bundles=, ajouter reference\:file\:nom_du_jar.jar@4, où nom_du_jar est le nom complet du jar copié précedemment
--lancer l'application, la commande est maintenant disponible
 ### Have Fun !

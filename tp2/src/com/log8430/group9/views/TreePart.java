@@ -26,14 +26,34 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
-
+/**
+ * Partie visuelle gerant l'affichage de l'arbre ainsi que le bouton pour changer de racine.
+ * l'arbre est complété suivant les expensions que demande l'utilisateur.
+ * La selection d'un element met a jour le fichier courant pour l'activation des commandes
+ * A la selection, on verifie l'etat de l'option d'autoRun pour lancer les commandes au besoin
+ * @author Alexandre
+ *
+ */
 public class TreePart implements InterPartCom{
+	/**
+	 * arbre representant l'arborescence de dossier et de fichier
+	 */
 	protected Tree fileTree;
+	/**
+	 * bouton gerant le changement de racine pour l'arbre
+	 */
 	protected Button selectRoot;
+	/**
+	 *  fichier couramment selectionné. C'est sur celui ci que sera effectué les actions de commandes
+	 */
 	protected File currentFile;
 
-	@PostConstruct
+	/**
+	 * construction des elements visuels que l'on ajoute à un element "parent"
+	 * @param parent element sur lequel est ajouté les composants graphiques
+	 */
 	public void createComposite(Composite parent) {
+		//creation du layout general il se compose d'une unique colonne et de 5 lignes
 		GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 1;
 		parent.setLayout(gridLayout);
@@ -41,6 +61,8 @@ public class TreePart implements InterPartCom{
 
 
 		fileTree = new Tree(parent, SWT.SINGLE | SWT.BORDER);
+		//affectation de la zone d'affichage de l'abre, il prend 4 lignes du layout et est en mesure 
+		//de modifier sa taille si son conteneur change de taille
 		GridData gridDataTree = new GridData(GridData.FILL,GridData.FILL,true,true,1,4);
 		fileTree.setLayoutData(gridDataTree);
 
@@ -48,6 +70,7 @@ public class TreePart implements InterPartCom{
 		GridData gridDataButton = new GridData(GridData.CENTER,GridData.FILL,false,false,1,1);
 		selectRoot.setLayoutData(gridDataButton);
 		selectRoot.setText("Select a file or a folder");
+		// affectation du comportement associé au bouton de selection de la racine
 		selectRoot.addListener(SWT.Selection,new Listener() {
 
 			@Override
@@ -56,20 +79,21 @@ public class TreePart implements InterPartCom{
 			}
 
 		});
-		
+		//selection d'une racine parmi le(s) racines existantes
 		File[] roots = File.listRoots();
 		if(roots.length > 0)
 		{
 			File root = roots[0];
 			setRoot(root);
 		}
+		//ajout du comportement a la demande d'expansion de l'arbre
 		fileTree.addListener(SWT.Expand, new Listener() {
 			public void handleEvent(Event e) {
 				TreeItem item = (TreeItem) e.item;
 				expand(item);
 			}
 		});
-
+		//ajout du comportement a la selection d'un element de l'arbre
 		fileTree.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event e) {
 				TreeItem item = (TreeItem) e.item;
@@ -79,7 +103,9 @@ public class TreePart implements InterPartCom{
 
 	}
 
-
+	/**
+	 * fontion gerant la selection de la nouvelle racine.
+	 */
 	private void selectFolder() {
 		Shell shell = new Shell();
 		DirectoryDialog dialog = new DirectoryDialog(shell, SWT.OPEN);
@@ -93,22 +119,35 @@ public class TreePart implements InterPartCom{
 		}
 
 	}
-
+	/**
+	 * fonction effectuant la modification de l'arbre lors du changement de racine
+	 * @param root
+	 */
 	private void setRoot(File root){
+		//on supprime tout les elements de l'arbre
 		fileTree.removeAll();
+		//creation du noeud racine
 		TreeItem rootItem = new TreeItem(fileTree, SWT.NONE);
 		if(root.getName().equals(""))
 			rootItem.setText(root.getAbsolutePath());
 		else
 			rootItem.setText(root.getName());
 		rootItem.setData(root);
+		//expansion initiale de l'arbre
 		expand(rootItem);
 		rootItem.setExpanded(true);
 	}
-	
+	/**
+	 * cette fonction s'occupe de recuperer les fichier et sous dossier de l'item dont on demande
+	 * l'expansion. Elle crée et ajoute les nouveaux items a l'arbre
+	 * @param item
+	 */
 	private void expand(TreeItem item){
 		if (item == null)
 			return;
+		//afin de pouvoir etendre les dossiers, de base un item vide leur est ajouté
+		//lors de l'expansion, cet item n'est plus necessaire, on le supprime donc pour le remplacer
+		//par le contenu du dossier
 		item.removeAll();
 		File root = (File) item.getData();
 		File[] files = root.listFiles();
@@ -123,11 +162,16 @@ public class TreePart implements InterPartCom{
 			else
 				treeItem.setText(file.getName());
 			treeItem.setData(file);
+			//ajout de l'element vide pour rendre les sous dossiers capable de s'expandre
 			if (file.isDirectory()) {
 				new TreeItem(treeItem, SWT.NONE);
 			}
 		}
 	}
+	/**
+	 * fonction gerant la recuperation du fichier dans l'item selecionné
+	 * @param item
+	 */
 	private void valueChanged(TreeItem item) {
 		if (item == null)
 			return;
@@ -138,7 +182,8 @@ public class TreePart implements InterPartCom{
 		this.setCurrentFile(file);
 	}
 	/**
-	 * 
+	 * fonction gerant le changement de fichier courrant et demandant l'exectution des commandes si
+	 * l'autoRun est activé
 	 * @param file
 	 */
 	private void setCurrentFile(File file) {

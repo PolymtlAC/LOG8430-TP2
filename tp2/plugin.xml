@@ -27,5 +27,14 @@
          </property>
       </product>
    </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            class="com.log8430.group9.views.MainWindow"
+            id="tp2.view1"
+            name="name"
+            restorable="true">
+      </view>
+   </extension>
 
 </plugin>

@@ -35,7 +35,7 @@ public class UICommand extends Composite {
 		super (parent,style);
 		this.command = command;
 		this.commandButton = new Button(this,SWT.PUSH);
-		this.commandButton.setText(command.getName());
+		this.commandButton.setText(command.getName().toString()); //protection contre un retour null
 		this.commandButton.setEnabled(false);
 		this.commandResult = new Label(this, SWT.SINGLE);
 
@@ -63,7 +63,9 @@ public class UICommand extends Composite {
 	 */
 	public void execute() {
 		try {
-			this.commandResult.setText(this.command.execute(currentFile));
+			if(currentFile != null){
+				this.commandResult.setText(this.command.execute(currentFile).toString());
+			}
 		} catch(Exception e) {
 			this.commandResult.setText(e.getMessage());
 		}
@@ -96,7 +98,9 @@ public class UICommand extends Composite {
 	 * @return a boolean telling if the command can be executed giving the current file type (file or folder).
 	 */
 	public boolean isEnabled() {
-		if(this.currentFile.isDirectory() && !this.command.folderCompatible()) {
+		if(currentFile == null){
+			return false;
+		} else if(this.currentFile.isDirectory() && !this.command.folderCompatible()) {
 			return false;
 		} else if(!this.currentFile.isDirectory() && !this.command.fileCompatible()) {
 			return false;

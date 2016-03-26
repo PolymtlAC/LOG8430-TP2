@@ -12,15 +12,20 @@
 package com.log8430.group9.views;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import javax.annotation.PostConstruct;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
@@ -35,6 +40,10 @@ import org.eclipse.swt.widgets.TreeItem;
  *
  */
 public class TreePart implements InterPartCom{
+	/**
+	 * temps pour la gestion du rafraichiment de l'affichage
+	 */
+	int precedentTime = 0;
 	/**
 	 * arbre representant l'arborescence de dossier et de fichier
 	 */
@@ -100,7 +109,16 @@ public class TreePart implements InterPartCom{
 				valueChanged(item);
 			}
 		});
-
+		fileTree.addMouseMoveListener(new MouseMoveListener() {
+			
+			@Override
+			public void mouseMove(MouseEvent e) {
+				if(e.time - precedentTime > 1000){
+					refresh(null);
+					precedentTime = e.time;
+				}
+			}
+		});
 	}
 
 	/**
@@ -155,17 +173,20 @@ public class TreePart implements InterPartCom{
 			return;
 		for (int i = 0; i < files.length; i++) {
 			File file = files[i];
+			addItem(file, item);
+		}
+	}
 
-			TreeItem treeItem = new TreeItem(item, SWT.NONE);
-			if(file.getName().equals(""))
-				treeItem.setText(file.getAbsolutePath());
-			else
-				treeItem.setText(file.getName());
-			treeItem.setData(file);
-			//ajout de l'element vide pour rendre les sous dossiers capable de s'expandre
-			if (file.isDirectory()) {
-				new TreeItem(treeItem, SWT.NONE);
-			}
+	private void addItem(File file,TreeItem item){
+		TreeItem treeItem = new TreeItem(item, SWT.NONE);
+		if(file.getName().equals(""))
+			treeItem.setText(file.getAbsolutePath());
+		else
+			treeItem.setText(file.getName());
+		treeItem.setData(file);
+		//ajout de l'element vide pour rendre les sous dossiers capable de s'expandre
+		if (file.isDirectory()) {
+			new TreeItem(treeItem, SWT.NONE);
 		}
 	}
 	/**
@@ -188,12 +209,58 @@ public class TreePart implements InterPartCom{
 	 */
 	private void setCurrentFile(File file) {
 		this.currentFile = file;
-        for(UICommand command : ressource.getCommands()) {
+		for(UICommand command : ressource.getCommands()) {
 			command.setCurrentFile(file);
 			if(ressource.getAutoRun() && command.isEnabled()) {
 				command.execute();
 			}
 		}
-		 
+
+	}
+
+	/**
+	 * fonction permettant de rafraichir l'affichage de l'arbre dans le cas de modification de celui ci
+	 * @param rootItem element a mettre a jour, si null on prend la racine de l'arbre
+	 */
+	private void refresh(TreeItem rootItem){
+		if(rootItem == null && this.fileTree.getItemCount() <= 0){
+			System.out.println("end of refresh for this branch");
+			return;
+		}
+		else if(rootItem == null && this.fileTree.getItemCount() > 0){
+			System.out.println("begin of refresh");
+			rootItem = this.fileTree.getItem(0);
+		}
+
+		File rootFile = (File) rootItem.getData();
+		ArrayList<String> childrenFileName = new ArrayList<>();
+		ArrayList<File> childrenFile = new ArrayList<>();
+		for(File file : rootFile.listFiles()){
+			childrenFileName.add(file.getName());
+			childrenFile.add(file);
+		}
+
+		//recuperation des enfants dans l'arbre
+		TreeItem[] childrenItem = rootItem.getItems();
+		ArrayList<String> childrenName = new ArrayList<>();
+		for(TreeItem item : childrenItem){
+			File file = (File)item.getData();
+			childrenName.add(file.getName());
+			if(childrenFileName.contains(file.getName())){
+				childrenFile.remove(file);
+				if(file.isDirectory() && item.getExpanded()){
+					refresh(item);
+				}
+			}
+			else{
+				item.dispose();
+			}
+		}
+		if(childrenFile.size() > 0){
+			for(File file: childrenFile){
+				addItem(file, rootItem);
+			}
+		}
+
 	}
 }

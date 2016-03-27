@@ -32,7 +32,7 @@ public class MockUICommand extends JPanel {
 	 * <p>
 	 * Create the graphical interface for one command.
 	 * </p>
-	 * @param command
+	 * @param command 
 	 */
 	public MockUICommand(Command command) {
 		this.command = command;

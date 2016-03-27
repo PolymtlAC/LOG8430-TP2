@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="com.log8430.group9.commandExtension">
+      <client
+            class="RenameCommand">
+      </client>
+   </extension>
+
+</plugin>

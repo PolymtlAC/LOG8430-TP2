@@ -224,18 +224,21 @@ public class TreePart implements InterPartCom{
 	 */
 	private void refresh(TreeItem rootItem){
 		if(rootItem == null && this.fileTree.getItemCount() <= 0){
-			System.out.println("end of refresh for this branch");
 			return;
 		}
 		else if(rootItem == null && this.fileTree.getItemCount() > 0){
-			System.out.println("begin of refresh");
 			rootItem = this.fileTree.getItem(0);
 		}
 
 		File rootFile = (File) rootItem.getData();
+					
 		ArrayList<String> childrenFileName = new ArrayList<>();
 		ArrayList<File> childrenFile = new ArrayList<>();
-		for(File file : rootFile.listFiles()){
+		File[] list = rootFile.listFiles();
+		if(list == null){
+			list = new File[0];
+		}
+		for(File file : list){
 			childrenFileName.add(file.getName());
 			childrenFile.add(file);
 		}

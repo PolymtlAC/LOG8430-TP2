@@ -1,13 +1,12 @@
-package com.log8430.group9.views;
+package Tests;
+
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.io.File;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import com.log8430.group9.commands.Command;
 
@@ -17,11 +16,15 @@ import com.log8430.group9.commands.Command;
  * Contains the command, the button and the result label. 
  * Also connect the button click with the command's execution.
  */
-public class UICommand extends Composite {
+public class MockUICommand extends JPanel {
 	
 	protected Command command;
-	protected Button commandButton;
-	protected Label commandResult;
+	protected JButton commandButton;
+	protected JLabel commandResult;
+	public JLabel getCommandResult() {
+		return commandResult;
+	}
+
 	protected File currentFile;
 	
 	/**
@@ -31,30 +34,20 @@ public class UICommand extends Composite {
 	 * </p>
 	 * @param command
 	 */
-	public UICommand(Command command,Composite parent,int style) {
-		super (parent,style);
+	public MockUICommand(Command command) {
 		this.command = command;
-		this.commandButton = new Button(this,SWT.PUSH);
-		this.commandButton.setText(command.getName()+""); //protection contre un retour null
+		this.commandButton = new JButton();
 		this.commandButton.setEnabled(false);
-		this.commandResult = new Label(this, SWT.SINGLE);
-
-		this.commandButton.addListener(SWT.Selection,event -> {
+		this.commandResult = new JLabel();
+		
+		this.commandButton.addActionListener(event -> {
 			this.execute();
 		});
 		
-		
-		GridLayout grid = new GridLayout();
-		grid.numColumns = 2;
-		this.setLayout(grid);
-		
-		GridData gridData= new GridData(SWT.FILL, SWT.CENTER, true, true, 1, 1);
-		gridData.minimumWidth = 200;
-		commandButton.setLayoutData(gridData);
-		GridData gridData2= new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
-		gridData2.minimumWidth = 800;
-		commandResult.setLayoutData(gridData2);
-		
+		this.setLayout(new GridLayout(1,2));
+		this.setMaximumSize(new Dimension(800,50));
+		this.add(this.commandButton);
+		this.add(this.commandResult);
 	}
 
 	/**
@@ -63,13 +56,11 @@ public class UICommand extends Composite {
 	 */
 	public void execute() {
 		try {
-			if(currentFile != null){
-				this.commandResult.setText(this.command.execute(currentFile)+"");
-			}
+			this.commandResult.setText(this.command.execute(currentFile));
 		} catch(Exception e) {
 			this.commandResult.setText(e.getMessage());
 		}
-	
+		
 	}
 	
 	/**
@@ -98,9 +89,7 @@ public class UICommand extends Composite {
 	 * @return a boolean telling if the command can be executed giving the current file type (file or folder).
 	 */
 	public boolean isEnabled() {
-		if(currentFile == null){
-			return false;
-		} else if(this.currentFile.isDirectory() && !this.command.folderCompatible()) {
+		if(this.currentFile.isDirectory() && !this.command.folderCompatible()) {
 			return false;
 		} else if(!this.currentFile.isDirectory() && !this.command.fileCompatible()) {
 			return false;
@@ -108,4 +97,5 @@ public class UICommand extends Composite {
 			return true;
 		}
 	}
+	
 }

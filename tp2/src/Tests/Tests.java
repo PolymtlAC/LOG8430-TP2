@@ -1,32 +1,21 @@
 package Tests;
 
 import java.io.File;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import org.easymock.EasyMock;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.part.ViewPart;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.log8430.group9.commands.Command;
 import com.log8430.group9.commands.PlugInLoader;
-import com.log8430.group9.views.CommandsPart;
-import com.log8430.group9.views.TreePart;
-import com.log8430.group9.views.UICommand;
 
 public class Tests{
 	private Command mockCommandFile = null;
 	private Command mockCommandDir = null;
 	private Command mockCommandFD = null;
 	private PlugInLoader pluginLoader = null;
-	private CommandsPart commandsPart = null;
 	private File fileTest;
 	private File dossierTest;
 	private ArrayList<MockUICommand> UICommandsList = new ArrayList<>();
@@ -119,7 +108,6 @@ public class Tests{
 		returnedValues.add(Boolean.TRUE);
 		
 		for(int i = 0; i< 1;i++){
-			System.out.println(i);
 			UICommandsList.get(i).setCurrentFile(dossierTest);
 			Assert.assertEquals("La commande n'a pas le comportement adequat ", returnedValues.get(i), UICommandsList.get(i).commandButton.isEnabled());
 			UICommandsList.get(i).execute();

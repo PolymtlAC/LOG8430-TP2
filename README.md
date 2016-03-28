@@ -9,7 +9,7 @@ Certaines commandes ne peuvent être exécuter que pour des fichiers ou des doss
 Les commandes sont chargés automatiquement au lancement du logiciel. L'utilisateur peut ajouter ses propres commandes. Il doit les implémenter sous la forme d'un plugin (un plugin par commande) tout en respectant l'interface Command. 
 
 Avant d'exécuter le logiciel, vous devez :
-- Aller dans le menu d'Eclipse "File" -> "Import..." -> General -> Existing Projects into Workspace -> sélectionner les projets java des commandes souhaitées (les projets des commandes par défaut se trouvent dans le dossier "code Command").
+- Aller dans le dossier plugin d'eclipse et ajouter les fichiers .jar des commandes implémentées par défaut. Les fichiers .jar relatif au commande se trouve dans le dossier plugins du projet.
 
 Pour exécuter le logiciel avec Eclipse, il faut : 
 - Executer "eclipse" dans le dossier application
@@ -24,15 +24,7 @@ Ajouter un plugin :
 -creer avec eclipse un nouveau projet de type plugin
 -ajouter dans plugin.xml les dependances tp2 et org.eclipse.core.runtime
 -aller dans extension et faire add et selectionner com.log8430.group9.CommandExtension
--Sur la droite à la ligne class, selectionner la classe implementant l'interface Command ci-dessus
-
-
-Pour l'ajouter à l'application fourni dans le dossier "application":
--exporter le plugin au format "Deployable plug-ins and fragments" dans un dossier
--copier le contenu de ce dossier dans application->plugins
--dans le dossier configuration ouvrez le fichier config.
--A la ligne osgi.bundles=, ajouter reference\:file\:nom_du_jar.jar@4, où nom_du_jar est le nom complet du jar copié précedemment
--lancer l'application, la commande est maintenant disponible
+-Sur la droite à la ligne class, selectionner la classe implementant l'interface Command ci-dessous
 
 Exemple d'une commande retournant le nom d'un fichier : 
 
